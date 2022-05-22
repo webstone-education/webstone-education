@@ -4,11 +4,16 @@
 	"description": "A Webstone Education student project.",
 	"main": "index.js",
 	"scripts": {
+		"dev": "echo \"TODO: Implement dev script\" && exit 1",
+		"start": "pnpm --filter ./app dev",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [
-		"webstone"
+		"webstone",
+		"education",
+		"full-stack",
+		"web development"
 	],
-	"author": "",
+	"author": "Webstone Technologies, Inc.",
 	"license": "ISC"
 }

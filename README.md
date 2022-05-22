@@ -1,2 +1,5 @@
-# student-repo-template
-When a student signs up for Webstone Education, this template repository is used as the foundation for all courses and modules.
+# Webstone Education
+
+Welcome 👋!
+
+This is your [Webstone Education](https://webstone.app) learning project. It contains lessons, quizzes and all source code for your courses. In addition, this is where you write your code as you work on individual lessons.

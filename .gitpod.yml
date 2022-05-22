@@ -1,0 +1,14 @@
+tasks:
+  - before: npm i -g pnpm
+    init: pnpm install
+    command: |
+      gp sync-done pnpm-install
+      pnpm start
+  - command: |
+      gp sync-await pnpm-install
+      pnpm dev
+
+ports:
+  - port: 8080
+    description: Lessons
+    onOpen: open-browser

@@ -1,4 +1,5 @@
 packages:
-  - "api/**"
-  - "frameworks/**"
-  - "web/**"
+  - "app"
+  - "courses/**/api/**"
+  - "courses/**/frameworks/**"
+  - "courses/**/web/**"
