@@ -1,0 +1,3 @@
+courses/*
+!courses/.keep
+node_modules
