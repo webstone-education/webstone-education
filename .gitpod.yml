@@ -1,3 +1,6 @@
+# Learn more about this file at https://www.gitpod.io/docs/references/gitpod-yml
+mainConfiguration: https://github.com/WebstoneHQ/courses
+
 tasks:
   - before: npm i -g pnpm
     init: pnpm install
