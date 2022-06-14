@@ -5,7 +5,7 @@
   export function load() {
     return {
       status: 307,
-      redirect: '/course/lessons/course-introduction/introduction',
+      redirect: '/course/course-introduction/overview',
     };
   }
 </script>
