@@ -17,7 +17,7 @@
   import '@svelteness/kit-docs/client/styles/vars.css';
 
   import { page } from '$app/stores';
-  import SvelteLogo from '$img/svelte-horizontal.svg?raw';
+  import WebstoneLogo from '$img/webstone-logo.svg?raw';
 
   import {
     Button,
@@ -61,7 +61,7 @@
   <KitDocsLayout {navbar} {sidebar}>
     <div class="logo" slot="navbar-left">
       <Button href="/">
-        {@html SvelteLogo}
+        {@html WebstoneLogo}
       </Button>
     </div>
 

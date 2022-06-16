@@ -1,8 +1,9 @@
+!.env.example
 .DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
 .env
 .env.*
-!.env.example
+.svelte-kit
+src/routes/course/\[*
+build
+node_modules
+package
