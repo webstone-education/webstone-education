@@ -18,7 +18,6 @@ fs
   .readdirSync(`${LESSONS_BASE_DIR}`, { withFileTypes: true })
   .filter(entry => entry.isDirectory())
   .forEach(({name}) => {
-
     try {
       fs.statSync(`${LESSONS_BASE_DIR}/${name}/content`)
       process.chdir(COURSE_ROUTE_BASE_DIR)
@@ -32,3 +31,8 @@ fs
       }
     }
   })
+
+// 3. Link course README as the highest-priority route in the navigation (i.e. [...00-00])
+process.chdir(COURSE_ROUTE_BASE_DIR)
+fs.symlinkSync(path.relative(COURSE_ROUTE_BASE_DIR, `./courses/${COURSE}/${CURRICULUM}/README.md`), `[...00_00]overview.md`)
+process.chdir("../../../..")
