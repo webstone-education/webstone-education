@@ -1,30 +1,21 @@
 {
   "0 debug pnpm:scope": {
     "selected": 1,
-    "total": 2,
     "workspacePrefix": "/workspace/webstone-education"
   },
-  "1 info pnpm": {
-    "err": {
-      "name": "Error",
-      "message": "app@0.0.1 dev: `svelte-kit dev --port 8080`\nExit status 1",
-      "code": "ELIFECYCLE",
-      "stack": "Error: app@0.0.1 dev: `svelte-kit dev --port 8080`\nExit status 1\n    at EventEmitter.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:107358:20)\n    at EventEmitter.emit (node:events:527:28)\n    at ChildProcess.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:93924:18)\n    at ChildProcess.emit (node:events:527:28)\n    at maybeClose (node:internal/child_process:1092:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:302:5)"
-    }
-  },
-  "2 error pnpm": {
+  "1 error pnpm": {
     "errno": 1,
-    "code": "ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL",
-    "pkgid": "app@0.0.1",
-    "stage": "dev",
-    "script": "svelte-kit dev --port 8080",
-    "pkgname": "app",
-    "prefix": "/workspace/webstone-education/app",
+    "code": "ELIFECYCLE",
+    "pkgid": "webstone-student-repo-todo@0.0.1",
+    "stage": "start",
+    "script": "pnpm --filter ./app dev",
+    "pkgname": "webstone-student-repo-todo",
     "err": {
       "name": "pnpm",
-      "message": "app@0.0.1 dev: `svelte-kit dev --port 8080`\nExit status 1",
-      "code": "ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL",
-      "stack": "Error: app@0.0.1 dev: `svelte-kit dev --port 8080`\nExit status 1\n    at EventEmitter.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:107358:20)\n    at EventEmitter.emit (node:events:527:28)\n    at ChildProcess.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:93924:18)\n    at ChildProcess.emit (node:events:527:28)\n    at maybeClose (node:internal/child_process:1092:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:302:5)"
+      "message": "webstone-student-repo-todo@0.0.1 start: `pnpm --filter ./app dev`\nExit status 1",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: webstone-student-repo-todo@0.0.1 start: `pnpm --filter ./app dev`\nExit status 1\n    at EventEmitter.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:107358:20)\n    at EventEmitter.emit (node:events:527:28)\n    at ChildProcess.<anonymous> (/home/gitpod/.nvm/versions/node/v16.15.1/lib/node_modules/pnpm/dist/pnpm.cjs:93924:18)\n    at ChildProcess.emit (node:events:527:28)\n    at maybeClose (node:internal/child_process:1092:16)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:302:5)"
     }
-  }
+  },
+  "2 warn pnpm:global": " Local package.json exists, but node_modules missing, did you mean to install?"
 }

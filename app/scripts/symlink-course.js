@@ -7,6 +7,12 @@ const CURRICULUM = process.argv[3] ?? "framework/sveltekit-css-rest-postgresql";
 const LESSONS_BASE_DIR = `./courses/${COURSE}/${CURRICULUM}/lessons`;
 const COURSE_ROUTE_BASE_DIR = "./app/src/routes/course";
 
+const symlink = (target, path) => {
+  process.chdir(COURSE_ROUTE_BASE_DIR)
+  fs.symlinkSync(target, path)
+  process.chdir("../../../..")
+};
+
 // 1. Clean up old course routes
 fs
   .readdirSync(COURSE_ROUTE_BASE_DIR, { withFileTypes: true })
@@ -20,9 +26,7 @@ fs
   .forEach(({name}) => {
     try {
       fs.statSync(`${LESSONS_BASE_DIR}/${name}/content`)
-      process.chdir(COURSE_ROUTE_BASE_DIR)
-      fs.symlinkSync(path.relative(COURSE_ROUTE_BASE_DIR, `${LESSONS_BASE_DIR}/${name}/content`), name)
-      process.chdir("../../../..")
+      symlink(path.relative(COURSE_ROUTE_BASE_DIR, `${LESSONS_BASE_DIR}/${name}/content`), name);
     } catch (error) {
       if (error.code === "ENOENT") {
         console.warn(`No "content" directory available at ${LESSONS_BASE_DIR}/${name}`)
@@ -33,6 +37,4 @@ fs
   })
 
 // 3. Link course README as the highest-priority route in the navigation (i.e. [...00-00])
-process.chdir(COURSE_ROUTE_BASE_DIR)
-fs.symlinkSync(path.relative(COURSE_ROUTE_BASE_DIR, `./courses/${COURSE}/${CURRICULUM}/README.md`), `[...00_00]overview.md`)
-process.chdir("../../../..")
+symlink(path.relative(COURSE_ROUTE_BASE_DIR, `./courses/${COURSE}/${CURRICULUM}/README.md`), `[...00_00]overview.md`)

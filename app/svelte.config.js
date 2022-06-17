@@ -15,6 +15,9 @@ const config = {
     },
 
     vite: {
+      optimizeDeps: {
+        exclude: ["vscode-oniguruma", "vscode-textmate"]
+      },
       plugins: [
         Icons({ compiler: 'svelte' }),
         kitDocsPlugin({
