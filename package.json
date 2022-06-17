@@ -1,10 +1,10 @@
 {
-	"name": "webstone-student-repo-todo",
+	"name": "webstone-student-repo",
 	"version": "0.0.1",
-	"description": "A Webstone Education student project.",
+	"description": "A Webstone Education student repository.",
 	"main": "index.js",
 	"scripts": {
-		"dev": "echo \"TODO: Implement dev script\" && exit 1",
+		"dev": "pnpm --filter ./courses/todo-app/framework/sveltekit-css-rest-postgresql/your-code/ dev",
 		"start": "pnpm --filter ./app dev",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
