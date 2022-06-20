@@ -29,6 +29,14 @@ const config = {
       resolve: {
         preserveSymlinks: true,
       },
+      server: {
+        hmr: {
+          clientPort: process.env.GITPOD_WORKSPACE_URL ? 443 : 8080,
+          host: process.env.GITPOD_WORKSPACE_URL
+            ? process.env.GITPOD_WORKSPACE_URL.replace("https://", "8080-")
+            : "localhost",
+        },
+      },
     },
   },
 };
