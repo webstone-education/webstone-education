@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      coursePath:
+        required: true
+        type: string
+      gitBranch:
+        required: true
+        type: string
+      gitCommitMessage:
+        required: true
+        type: string
+      mustHaveCourse:
+        default: true
+        required: false
+        type: boolean
+      prDescription:
+        required: true
+        type: string
+      prTitle:
+        required: true
+        type: string
+      studentRepoName:
+        required: true
+        type: string
+      studentRepoOwner:
+        required: true
+        type: string
+
+jobs:
+  open-pr-in-student-repo:
+    if: github.repository_owner == 'WebstoneHQ'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    env:
+      COURSE_PATH: ${{ inputs.coursePath }}
+    steps:
+      - name: Clone the `WebstoneHQ/courses` repo
+        uses: actions/checkout@v3
+        with:
+          path: courses
+          persist-credentials: false
+          ref: main
+          repository: WebstoneHQ/courses
+          ssh-key: ${{ secrets.COURSES_REPO_PRIVATE_DEPLOY_KEY }}
+      - name: Clone the student repo fork
+        uses: actions/checkout@v3
+        with:
+          path: student-repo-fork
+      - name: Verify the student's fork contains the course
+        if: inputs.mustHaveCourse && hashFiles(format('student-repo-fork/{0}/package.json', env.COURSE_PATH)) == ''
+        uses: actions/github-script@v6
+        with:
+          script: core.setFailed(`Course ${process.env.COURSE_PATH} does not exist.`)
+      - name: Copy course content
+        working-directory: student-repo-fork
+        run: |
+          git switch -c ${{ inputs.gitBranch }}
+          mkdir -p ./${{ env.COURSE_PATH }}
+          cp -r ../courses/${{ env.COURSE_PATH }} ./${{ env.COURSE_PATH }}
+          git config user.name "Webstone Education Bot"
+          git config user.email github-bot@webstonehq.com
+          git add ./${{ env.COURSE_PATH }}
+          git commit -m "${{ inputs.gitCommitMessage }}"
+          git push --set-upstream origin ${{ inputs.gitBranch }}
+      - name: Open a PR in the student repo
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.WEBSTONE_BOT_PAT }}
+          script: |
+            const result = await github.rest.pulls.create({
+              title: '${{ inputs.prTitle }}',
+              owner: '${{ inputs.studentRepoOwner }}',
+              repo: '${{ inputs.studentRepoName }}',
+              head: 'WebstoneHQ:${{ inputs.gitBranch }}',
+              base: 'main',
+              body: `${{ inputs.prDescription }}`,
+            });
