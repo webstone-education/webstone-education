@@ -3,16 +3,51 @@ on:
     types: [on_new_content_available]
 
 jobs:
-  # TODO: Add a job to fetch upstream and make sure the student fork repo is up-to-date
-  # TODO: Make `open-pr-in-student-repo` dependent on the above, new job
-  open-pr-in-student-repo:
-    uses: ./.github/workflows/open-pr-in-student-repo.yml
-    with:
-      coursepath: ${{ format('courses/{0}/{1}/{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
-      gitBranch: ${{ github.event.client_payload.git.branch }}
-      gitCommitMessage: ${{ github.event.client_payload.git.commitmessage }}
-      prDescription: ${{ github.event.client_payload.pr.description }}
-      prTitle: ${{ github.event.client_payload.pr.title }}
-      studentRepoName: ${{ github.event.client_payload.studentrepo.name }}
-      studentRepoOwner: ${{ github.event.client_payload.studentrepo.owner }}
-    secrets: inherit
+  open-pr-with-new-content:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      COURSE_PATH: ${{ format('courses/{0}/{1}/{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
+      GIT_BRANCH: ${{ github.event.client_payload.git.branch }}
+      GIT_COMMIT_MESSAGE: ${{ github.event.client_payload.git.commitmessage }}
+      PR_DESCRIPTION: ${{ github.event.client_payload.pr.description }}
+      PR_TITLE: ${{ github.event.client_payload.pr.title }}
+    steps:
+      - name: Clone the course repo
+        uses: actions/checkout@v3
+        with:
+          path: course
+          persist-credentials: false
+          ref: main
+          repository: WebstoneHQ/c-todoapp-framework-sveltekit-css-rest-postgresql
+          ssh-key: ${{ secrets.COURSE_REPO_PRIVATE_DEPLOY_KEY }}
+      - name: Clone the student repo
+        uses: actions/checkout@v3
+        with:
+          path: student-repo
+      - name: Copy course content
+        working-directory: student-repo
+        run: |
+          rm -fr ../course/.git
+          git switch -c ${{ env.GIT_BRANCH }}
+          mkdir -p ./${{ env.COURSE_PATH }}
+          cp -r ../course/* ./${{ env.COURSE_PATH }}
+          git config user.name "Webstone Education Bot"
+          git config user.email github-bot@webstonehq.com
+          git add ./
+          git commit -m "${{ env.GIT_COMMIT_MESSAGE }}"
+          git push --set-upstream origin ${{ env.GIT_BRANCH }}
+      - name: Open a PR in the student repo
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const result = await github.rest.pulls.create({
+              title: '${{ env.PR_TITLE }}',
+              owner: '${{ github.repository_owner }}',
+              repo: '${{ github.repository }}'.split('/')[1],
+              head: '${{ env.GIT_BRANCH }}',
+              base: 'main',
+              body: `${{ env.PR_DESCRIPTION }}`,
+            });
