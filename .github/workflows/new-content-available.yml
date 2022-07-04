@@ -28,19 +28,27 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: student-repo
+      - name: Check if branch already exists
+        id: precondition
+        working-directory: student-repo
+        run: git ls-remote --heads origin ${{ env.GIT_BRANCH }} && echo "::set-output name=abortWorkflow::true" || echo "::set-output name=abortWorkflow::false"
       - name: Copy course content
+        if: steps.precondition.outputs.abortWorkflow == 'false'
         working-directory: student-repo
         run: |
-          rm -fr ../course/.git
-          git switch -c ${{ env.GIT_BRANCH }}
-          mkdir -p ./${{ env.COURSE_PATH }}
-          cp -r ../course/* ./${{ env.COURSE_PATH }}
-          git config user.name "Webstone Education Bot"
-          git config user.email github-bot@webstonehq.com
-          git add ./
-          git commit -m "${{ env.GIT_COMMIT_MESSAGE }}"
-          git push --set-upstream origin ${{ env.GIT_BRANCH }}
+          if [[ -z $(git ls-remote --heads origin ${{ env.GIT_BRANCH }}) ]]; then
+            rm -fr ../course/.git
+            git switch -c ${{ env.GIT_BRANCH }}
+            mkdir -p ./${{ env.COURSE_PATH }}
+            cp -r ../course/* ./${{ env.COURSE_PATH }}
+            git config user.name "Webstone Education Bot"
+            git config user.email github-bot@webstonehq.com
+            git add ./
+            git commit -m "${{ env.GIT_COMMIT_MESSAGE }}"
+            git push --set-upstream origin ${{ env.GIT_BRANCH }}
+          fi
       - name: Open a PR in the student repo
+        if: steps.precondition.outputs.abortWorkflow == 'false'
         uses: actions/github-script@v6
         with:
           script: |
