@@ -2,6 +2,13 @@
 
 Welcome 👋!
 
+> **Warning**
+> 
+> Thank you for being an early adopter! This repository is a placeholder for now while we work on the final student experience.
+> You can follow the progress in the [WebstoneHQ/webstone-education](https://github.com/WebstoneHQ/webstone-education/issues/29) repository.
+>
+> We will send you pull requests to update this repository when we're ready. You will also receive pull requests with courses, updates, and new technology stacks.
+
 This is your [Webstone Education](https://webstone.app) learning repository. It contains lessons, quizzes and all source code for your courses. In addition, this is where you write your code as you work on individual lessons.
 
 ## Getting started
