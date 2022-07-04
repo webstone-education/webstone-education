@@ -5,7 +5,7 @@ Welcome 👋!
 > **Warning**
 > 
 > Thank you for being an early adopter! This repository is a placeholder for now while we work on the final student experience.
-> You can follow the progress in the [WebstoneHQ/webstone-education](https://github.com/WebstoneHQ/webstone-education/issues/29) repository.
+> You can follow the progress in the [WebstoneHQ/webstone-education](https://github.com/WebstoneHQ/webstone-education) repository.
 >
 > We will send you pull requests to update this repository when we're ready. You will also receive pull requests with courses, updates, and new technology stacks.
 
