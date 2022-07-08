@@ -4,7 +4,7 @@
 	"description": "A Webstone Education student repository.",
 	"main": "index.js",
 	"scripts": {
-		"dev": "pnpm --filter ./courses/todo-app/framework/sveltekit-css-rest-postgresql/your-code/ dev",
+		"dev": "pnpm --filter ./courses/todoapp/framework/sveltekit-css-rest-postgresql/your-code/ dev",
 		"start": "pnpm --filter ./app dev",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
