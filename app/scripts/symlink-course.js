@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 
-const COURSE = process.argv[2] ?? "todo-app";
+const COURSE = process.argv[2] ?? "todoapp";
 const CURRICULUM = process.argv[3] ?? "framework/sveltekit-css-rest-postgresql";
 const LESSONS_BASE_DIR = `./courses/${COURSE}/${CURRICULUM}/lessons`;
 const COURSE_ROUTE_BASE_DIR = "./app/src/routes/course";
