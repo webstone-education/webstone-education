@@ -36,7 +36,7 @@ jobs:
         run: |
           rm -fr ../course/.git
           git switch -c ${{ env.GIT_BRANCH }}
-          cp -r ../course/* .
+          cp -r ../course/* ./course/
           git config user.name "Webstone Education Bot"
           git config user.email github-bot@webstonehq.com
           git add ./
