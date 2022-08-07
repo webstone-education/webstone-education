@@ -11,28 +11,30 @@ const symlink = (target, path) => {
   process.chdir("../../../..")
 };
 
-// 1. Clean up old course routes
-fs
-  .readdirSync(COURSE_ROUTE_BASE_DIR, { withFileTypes: true })
-  .filter(dirent => dirent.isSymbolicLink())
-  .forEach(({name}) => fs.unlinkSync(`${COURSE_ROUTE_BASE_DIR}/${name}`))
+if (fs.existsSync(LESSONS_BASE_DIR)) {
+  // 1. Clean up old course routes
+  fs
+    .readdirSync(COURSE_ROUTE_BASE_DIR, { withFileTypes: true })
+    .filter(dirent => dirent.isSymbolicLink())
+    .forEach(({name}) => fs.unlinkSync(`${COURSE_ROUTE_BASE_DIR}/${name}`))
 
-// 2. Link new course routes
-fs
-  .readdirSync(`${LESSONS_BASE_DIR}`, { withFileTypes: true })
-  .filter(entry => entry.isDirectory())
-  .forEach(({name}) => {
-    try {
-      fs.statSync(`${LESSONS_BASE_DIR}/${name}/content`)
-      symlink(path.relative(COURSE_ROUTE_BASE_DIR, `${LESSONS_BASE_DIR}/${name}/content`), name);
-    } catch (error) {
-      if (error.code === "ENOENT") {
-        console.warn(`No "content" directory available at ${LESSONS_BASE_DIR}/${name}`)
-      } else {
-        console.error(error)
+  // 2. Link new course routes
+  fs
+    .readdirSync(`${LESSONS_BASE_DIR}`, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .forEach(({name}) => {
+      try {
+        fs.statSync(`${LESSONS_BASE_DIR}/${name}/content`)
+        symlink(path.relative(COURSE_ROUTE_BASE_DIR, `${LESSONS_BASE_DIR}/${name}/content`), name);
+      } catch (error) {
+        if (error.code === "ENOENT") {
+          console.warn(`No "content" directory available at ${LESSONS_BASE_DIR}/${name}`)
+        } else {
+          console.error(error)
+        }
       }
-    }
-  })
-
-// 3. Link course README as the highest-priority route in the navigation (i.e. [...00-00])
-symlink(path.relative(COURSE_ROUTE_BASE_DIR, `./course/README.md`), `[...00_00]overview.md`)
+    })
+  
+  // 3. Link course README as the highest-priority route in the navigation (i.e. [...00-00])
+  symlink(path.relative(COURSE_ROUTE_BASE_DIR, `./course/README.md`), `[...00_00]overview.md`)
+}
