@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COURSE_PATH: ${{ format('courses/{0}/{1}/{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
-      COURSE_PRIVATE_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course.privateDeployKeyName }}
       GIT_BRANCH: ${{ github.event.client_payload.git.branch }}
       GIT_COMMIT_MESSAGE: ${{ github.event.client_payload.git.commitmessage }}
       PR_DESCRIPTION: ${{ github.event.client_payload.pr.description }}
@@ -23,7 +22,7 @@ jobs:
           persist-credentials: false
           ref: main
           repository: WebstoneHQ/${{ format('c-{0}-{1}-{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
-          ssh-key: ${{ secrets[env.COURSE_PRIVATE_DEPLOY_KEY_NAME] }}
+          ssh-key: ${{ secrets.COURSE_REPO_PRIVATE_DEPLOY_KEY }}
       - name: Clone the student repo
         uses: actions/checkout@v3
         with:
