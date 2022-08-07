@@ -2,9 +2,7 @@
 import fs from "fs";
 import path from "path";
 
-const COURSE = process.argv[2] ?? "todoapp";
-const CURRICULUM = process.argv[3] ?? "framework/sveltekit-css-rest-postgresql";
-const LESSONS_BASE_DIR = `./courses/${COURSE}/${CURRICULUM}/lessons`;
+const LESSONS_BASE_DIR = `./course/lessons`;
 const COURSE_ROUTE_BASE_DIR = "./app/src/routes/course";
 
 const symlink = (target, path) => {
@@ -37,4 +35,4 @@ fs
   })
 
 // 3. Link course README as the highest-priority route in the navigation (i.e. [...00-00])
-symlink(path.relative(COURSE_ROUTE_BASE_DIR, `./courses/${COURSE}/${CURRICULUM}/README.md`), `[...00_00]overview.md`)
+symlink(path.relative(COURSE_ROUTE_BASE_DIR, `./course/README.md`), `[...00_00]overview.md`)

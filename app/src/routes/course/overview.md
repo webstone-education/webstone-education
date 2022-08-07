@@ -1,1 +1,1 @@
-../../../../courses/index.md
+../../../../course/index.md
