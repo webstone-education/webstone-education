@@ -20,7 +20,7 @@ jobs:
           path: course
           persist-credentials: false
           ref: main
-          repository: WebstoneHQ/${{ format('c-{0}-{1}-{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
+          repository: WebstoneHQ/${{ format('c-{0}-{1}', github.event.client_payload.course.id, github.event.client_payload.course.stack) }}
           ssh-key: ${{ secrets.COURSE_REPO_PRIVATE_DEPLOY_KEY }}
       - name: Clone the student repo
         uses: actions/checkout@v3
