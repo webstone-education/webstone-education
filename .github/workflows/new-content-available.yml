@@ -9,19 +9,33 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     env:
+      COURSE_ID: ${{ github.event.client_payload.courses.id }}
+      COURSE_1_STACK: ${{ github.event.client_payload.courses.fullstackOrWeb.stack }}
+      COURSE_1_DEPLOY_KEY_NAME: ${{ github.event.client_payload.courses.fullstackOrWeb.deploykeyname }}
+      COURSE_2_STACK: ${{ github.event.client_payload.courses.backend.stack }}
+      COURSE_2_DEPLOY_KEY_NAME: ${{ github.event.client_payload.courses.backend.deploykeyname }}
       GIT_BRANCH: ${{ github.event.client_payload.git.branch }}
       GIT_COMMIT_MESSAGE: ${{ github.event.client_payload.git.commitmessage }}
       PR_DESCRIPTION: ${{ github.event.client_payload.pr.description }}
       PR_TITLE: ${{ github.event.client_payload.pr.title }}
     steps:
-      - name: Clone the course repo
+      - name: Clone the fullstack or web course repo
         uses: actions/checkout@v3
         with:
-          path: course
+          path: course-fullstack-or-web
           persist-credentials: false
           ref: main
-          repository: WebstoneHQ/${{ format('c-{0}-{1}-{2}', github.event.client_payload.course.id, github.event.client_payload.course.stackgroup, github.event.client_payload.course.stack) }}
-          ssh-key: ${{ secrets.COURSE_REPO_PRIVATE_DEPLOY_KEY }}
+          repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_1_STACK) }}
+          ssh-key: ${{ secrets[env.COURSE_1_DEPLOY_KEY_NAME] }}
+      - name: Clone the optional backend course repo
+        if: env.COURSE_2_STACK != null
+        uses: actions/checkout@v3
+        with:
+          path: course-backend
+          persist-credentials: false
+          ref: main
+          repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_2_STACK) }}
+          ssh-key: ${{ secrets[env.COURSE_2_DEPLOY_KEY_NAME] }}
       - name: Clone the student repo
         uses: actions/checkout@v3
         with:
@@ -30,13 +44,25 @@ jobs:
         id: precondition
         working-directory: student-repo
         run: git ls-remote --heads --exit-code origin ${{ env.GIT_BRANCH }} && echo "::set-output name=abortWorkflow::true" || echo "::set-output name=abortWorkflow::false"
-      - name: Copy course content
+      - name: Copy fullstack content
+        if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_STACK == null
+        working-directory: student-repo
+        run: |
+          rm -fr ../course-fullstack-or-web/.git
+          cp -r ../course-fullstack-or-web/* ./course/
+      - name: Copy frontend & backend content
+        if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_STACK != null
+        working-directory: student-repo
+        run: |
+          rm -fr ../course-fullstack-or-web/.git ../course-backend/.git
+          mkdir -p ./course/frontend ./course/backend
+          cp -r ../course-fullstack-or-web/* ./course/frontend/
+          cp -r ../course-backend/* ./course/backend/
+      - name: Commit to git & push branch
         if: steps.precondition.outputs.abortWorkflow == 'false'
         working-directory: student-repo
         run: |
-          rm -fr ../course/.git
           git switch -c ${{ env.GIT_BRANCH }}
-          cp -r ../course/* ./course/
           git config user.name "Webstone Education Bot"
           git config user.email github-bot@webstonehq.com
           git add ./
