@@ -88,7 +88,7 @@ if (IS_FULLSTACK_COURSE) {
 		`${fs.readFileSync(`./course/frontend/README.md`)}`
 	);
 	fs.writeFileSync(
-		`${COURSE_ROUTE_BASE_DIR}/[...00_01]overview-backend}.md`,
+		`${COURSE_ROUTE_BASE_DIR}/[...00_01]overview-backend.md`,
 		`${fs.readFileSync(`./course/backend/README.md`)}`
 	);
 }
