@@ -1,0 +1,17 @@
+{
+  "packages": [
+    "nodejs@18",
+    "nodePackages_latest.pnpm@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "source .config/devbox/set-env.sh",
+      "test -d ./node_modules || pnpm install"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}
