@@ -1,19 +1,29 @@
 {
-	"name": "webstone-student-repo",
-	"version": "0.0.1",
-	"description": "A Webstone Education student repository.",
-	"main": "index.js",
+  "private": true,
+  "name": "webstone-student-repo",
+  "description": "A Webstone Education student repository.",
+  "version": "1.0.0",
+  "homepage": "https://webstone.app",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WebstoneHQ/webstone-education/issues"
+  },
+  "author": {
+    "name": "Webstone Technologies, Inc.",
+    "url": "https://github.com/WebstoneHQ"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WebstoneHQ/webstone-education.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "webstone, education, full-stack, web, development"
+  ],
 	"scripts": {
 		"dev": "echo \"TODO: A CLI to select which lesson to start, solution or student code.\"",
-		"start": "mkdir -p your-project && node ./app/scripts/symlink-course.js && pnpm --filter ./app dev",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [
-		"webstone",
-		"education",
-		"full-stack",
-		"web development"
-	],
-	"author": "Webstone Technologies, Inc.",
-	"license": "ISC"
+		"start": "mkdir -p your-project && nc -z localhost 4321 > /dev/null 2>&1 && echo \"\nVisit http://localhost:4321/ to get started.\n\" || pnpm --filter ./app dev"
+	}
 }

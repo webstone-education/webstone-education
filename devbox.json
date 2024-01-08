@@ -6,7 +6,8 @@
   "shell": {
     "init_hook": [
       "source .config/devbox/set-env.sh",
-      "test -d ./node_modules || pnpm install"
+      "test -d ./node_modules || pnpm install",
+      "npm start"
     ],
     "scripts": {
       "test": [
