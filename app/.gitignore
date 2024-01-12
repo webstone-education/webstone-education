@@ -19,3 +19,9 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# sym-linked course content
+src/content/docs
+
+# sym-linked course nav translations
+src/i18n/translations/*/nav.ts

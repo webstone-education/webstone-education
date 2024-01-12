@@ -1,0 +1,15 @@
+---
+import languages from '../../i18n/languages';
+
+export const getStaticPaths = () => Object.keys(languages).map((lang) => ({ params: { lang } }));
+
+const { lang } = Astro.params;
+
+let courseLandingPagePath = "fs";
+const courseLandingPageResponse = await fetch(Astro.url.href + "/" + courseLandingPagePath);
+if (courseLandingPageResponse.status === 404) {
+	courseLandingPagePath = "fe";
+}
+---
+
+<meta http-equiv="refresh" content={`0;url=/${lang}/${courseLandingPagePath}`} />
