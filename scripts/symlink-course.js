@@ -84,7 +84,6 @@ const writeNav = () => {
 
 const linkContent = () => {
   COURSE_TYPES.forEach((courseType, courseTypeIndex) => {
-    console.log({courseType});
     const contentDir = `./course/${courseType}/lessons/content`;
     const contentDirectories = fs.readdirSync(contentDir, { withFileTypes: true })
       .filter((dirent) => dirent.isDirectory())

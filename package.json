@@ -24,6 +24,6 @@
   ],
 	"scripts": {
 		"dev": "echo \"TODO: A CLI to select which lesson to start, solution or student code.\"",
-		"start": "mkdir -p your-project && nc -z localhost 4321 > /dev/null 2>&1 && echo \"\nVisit http://localhost:4321/ to get started.\n\" || pnpm --filter ./app dev"
+		"start": "mkdir -p your-project && node ./scripts/symlink-course.js && nc -z localhost 4321 > /dev/null 2>&1 && echo \"\nVisit http://localhost:4321/ to get started.\n\" || pnpm --filter ./app dev"
 	}
 }
