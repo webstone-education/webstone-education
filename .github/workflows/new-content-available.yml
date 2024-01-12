@@ -49,15 +49,16 @@ jobs:
         working-directory: student-repo
         run: |
           rm -fr ../course-fullstack-or-web/.git
-          cp -r ../course-fullstack-or-web/* ./course/
+          mkdir -p ./course/fs
+          cp -r ../course-fullstack-or-web/lessons ./course/fs/lessons
       - name: Copy frontend & backend content
         if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_STACK != null
         working-directory: student-repo
         run: |
           rm -fr ../course-fullstack-or-web/.git ../course-backend/.git
-          mkdir -p ./course/frontend ./course/backend
-          cp -r ../course-fullstack-or-web/* ./course/frontend/
-          cp -r ../course-backend/* ./course/backend/
+          mkdir -p ./course/fe ./course/be
+          cp -r ../course-fullstack-or-web/lessons ./course/fe/lessons
+          cp -r ../course-backend/* ./course/be/lessons
       - name: Commit to git & push branch
         if: steps.precondition.outputs.abortWorkflow == 'false'
         working-directory: student-repo
