@@ -21,11 +21,15 @@ if (KNOWN_LANGUAGES.includes(newLangWithRegion)) {
 }
 
 */
-let courseLandingPagePath = "en/fs";
-const courseLandingPageResponse = await fetch(Astro.url.href + courseLandingPagePath);
-if (courseLandingPageResponse.status === 404) {
-	courseLandingPagePath = "en/fe";
+const fsCourseLandingPageResponse = await fetch(Astro.url.href + "en/fs");
+if (fsCourseLandingPageResponse.status === 200) {
+	return Astro.redirect("/en/fs");
+} else {
+	const feCourseLandingPageResponse = await fetch(Astro.url.href + "en/fe");
+	if (feCourseLandingPageResponse.status === 200) {
+		return Astro.redirect("/en/fe");
+	} else {
+		return Astro.redirect("/en/start");
+	}
 }
 ---
-
-<meta http-equiv="refresh" content=`0;url=/${courseLandingPagePath}` />

@@ -23,5 +23,8 @@ pnpm-debug.log*
 # sym-linked course content
 src/content/docs
 
+# Force-add start.mdx files with this command:
+# for file in ./app/src/content/docs/*/start.mdx; do git add -f "$file"; done
+
 # sym-linked course nav translations
 src/i18n/translations/*/nav.ts

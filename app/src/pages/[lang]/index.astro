@@ -5,11 +5,15 @@ export const getStaticPaths = () => Object.keys(languages).map((lang) => ({ para
 
 const { lang } = Astro.params;
 
-let courseLandingPagePath = "fs";
-const courseLandingPageResponse = await fetch(Astro.url.href + "/" + courseLandingPagePath);
-if (courseLandingPageResponse.status === 404) {
-	courseLandingPagePath = "fe";
+const fsCourseLandingPageResponse = await fetch(Astro.url.href + "/fs");
+if (fsCourseLandingPageResponse.status === 200) {
+	return Astro.redirect("/fs");
+} else {
+	const feCourseLandingPageResponse = await fetch(Astro.url.href + "/fe");
+	if (feCourseLandingPageResponse.status === 200) {
+		return Astro.redirect(lang + "/fe");
+	} else {
+		return Astro.redirect(lang + "/start");
+	}
 }
 ---
-
-<meta http-equiv="refresh" content={`0;url=/${lang}/${courseLandingPagePath}`} />
