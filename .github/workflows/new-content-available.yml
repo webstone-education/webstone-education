@@ -9,29 +9,32 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     env:
-      COURSE_ID: ${{ github.event.client_payload.courses.id }}
-      COURSE_1_STACK: ${{ github.event.client_payload.courses.fullstackOrWeb.stack }}
-      COURSE_1_DEPLOY_KEY_NAME: ${{ github.event.client_payload.courses.fullstackOrWeb.deploykeyname }}
-      COURSE_2_STACK: ${{ github.event.client_payload.courses.backend.stack }}
-      COURSE_2_DEPLOY_KEY_NAME: ${{ github.event.client_payload.courses.backend.deploykeyname }}
+      COURSE_ID: ${{ github.event.client_payload.courseId }}
+      COURSE_1_TYPE: ${{ github.event.client_payload.course_1.type }}
+      COURSE_1_STACK: ${{ github.event.client_payload.course_1.stack }}
+      COURSE_1_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course_1.deploykeyname }}
+      # Course 2 is optional. It's used when we deliver a new course that consists of separate frontend and backend lessons
+      COURSE_2_TYPE: ${{ github.event.client_payload.course_2.type }}
+      COURSE_2_STACK: ${{ github.event.client_payload.course_2.stack }}
+      COURSE_2_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course_2.deploykeyname }}
       GIT_BRANCH: ${{ github.event.client_payload.git.branch }}
       GIT_COMMIT_MESSAGE: ${{ github.event.client_payload.git.commitmessage }}
       PR_DESCRIPTION: ${{ github.event.client_payload.pr.description }}
       PR_TITLE: ${{ github.event.client_payload.pr.title }}
     steps:
-      - name: Clone the fullstack or web course repo
+      - name: Clone the course 1 repo
         uses: actions/checkout@v3
         with:
-          path: course-fullstack-or-web
+          path: course-1
           persist-credentials: false
           ref: main
           repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_1_STACK) }}
           ssh-key: ${{ secrets[env.COURSE_1_DEPLOY_KEY_NAME] }}
-      - name: Clone the optional backend course repo
-        if: env.COURSE_2_STACK != null
+      - name: Clone the course 2 repo, optional
+        if: env.COURSE_2_TYPE != null
         uses: actions/checkout@v3
         with:
-          path: course-backend
+          path: course-2
           persist-credentials: false
           ref: main
           repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_2_STACK) }}
@@ -44,21 +47,20 @@ jobs:
         id: precondition
         working-directory: student-repo
         run: git ls-remote --heads --exit-code origin ${{ env.GIT_BRANCH }} && echo "::set-output name=abortWorkflow::true" || echo "::set-output name=abortWorkflow::false"
-      - name: Copy fullstack content
-        if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_STACK == null
+      - name: Copy course 1 content
+        if: steps.precondition.outputs.abortWorkflow == 'false'
         working-directory: student-repo
         run: |
-          rm -fr ../course-fullstack-or-web/.git
-          mkdir -p ./course/fs
-          cp -r ../course-fullstack-or-web/lessons ./course/fs/lessons
-      - name: Copy frontend & backend content
-        if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_STACK != null
+          rm -fr ../course-1/.git
+          mkdir -p ./course/${{ env.COURSE_1_TYPE }}
+          cp -r ../course-1/lessons ./course/${{ env.COURSE_1_TYPE }}/
+      - name: Copy course 2 content
+        if: steps.precondition.outputs.abortWorkflow == 'false' && env.COURSE_2_TYPE != null
         working-directory: student-repo
         run: |
-          rm -fr ../course-fullstack-or-web/.git ../course-backend/.git
-          mkdir -p ./course/fe ./course/be
-          cp -r ../course-fullstack-or-web/lessons ./course/fe/lessons
-          cp -r ../course-backend/* ./course/be/lessons
+          rm -fr ../course-2/.git
+          mkdir -p ./course/${{ env.COURSE_2_TYPE }}
+          cp -r ../course-2/lessons ./course/${{ env.COURSE_2_TYPE }}/
       - name: Commit to git & push branch
         if: steps.precondition.outputs.abortWorkflow == 'false'
         working-directory: student-repo
