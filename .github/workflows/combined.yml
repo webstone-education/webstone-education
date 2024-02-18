@@ -9,7 +9,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     env:
-      COURSE_ID: ${{ github.event.client_payload.course.id }}
+      COURSE_ID: ${{ github.event.client_payload.courseId }}
       COURSE_1_TYPE: ${{ github.event.client_payload.course_1.type }}
       COURSE_1_STACK: ${{ github.event.client_payload.course_1.stack }}
       COURSE_1_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course_1.deploykeyname }}
