@@ -1,17 +1,19 @@
 {
   "packages": [
     "nodejs@18",
-    "nodePackages_latest.pnpm@latest"
+    "nodePackages_latest.pnpm@latest",
+    "tmux@latest",
+    "tmuxp@latest",
+    "gh@latest"
   ],
   "shell": {
     "init_hook": [
-      "source .config/devbox/set-env.sh",
-      "test -d ./node_modules || pnpm install",
-      "npm start"
+      "gh auth status > /dev/null || gh auth login",
+      "gh extension list | grep -q 'gh dash' || gh extension install dlvhdr/gh-dash"
     ],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
+      "tmux": [
+        "tmuxp load --yes .config/tmux/tmuxp.yaml"
       ]
     }
   }

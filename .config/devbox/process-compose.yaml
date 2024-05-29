@@ -1,0 +1,11 @@
+# Learn more at https://f1bonacc1.github.io/process-compose/
+version: "0.5"
+is_strict: true
+processes:
+  install_dependencies:
+    command: pnpm install
+  start_student_app:
+    command: pnpm start
+    depends_on:
+      install_dependencies:
+        condition: process_completed_successfully
