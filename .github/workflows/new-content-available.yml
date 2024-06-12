@@ -9,6 +9,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     env:
+      COURSES_GITHUB_ORG: ${{ github.event.client_payload.coursesGitHubOrg }}
       COURSE_ID: ${{ github.event.client_payload.courseId }}
       COURSE_1_TYPE: ${{ github.event.client_payload.course_1.type }}
       COURSE_1_STACK: ${{ github.event.client_payload.course_1.stack }}
@@ -28,7 +29,7 @@ jobs:
           path: course-1
           persist-credentials: false
           ref: main
-          repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_1_STACK) }}
+          repository: ${{ env.COURSES_GITHUB_ORG }}/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_1_STACK) }}
           ssh-key: ${{ secrets[env.COURSE_1_DEPLOY_KEY_NAME] }}
       - name: Clone the course 2 repo, optional
         if: env.COURSE_2_TYPE != null
@@ -37,7 +38,7 @@ jobs:
           path: course-2
           persist-credentials: false
           ref: main
-          repository: WebstoneHQ/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_2_STACK) }}
+          repository: ${{ env.COURSES_GITHUB_ORG }}/${{ format('c-{0}-{1}', env.COURSE_ID, env.COURSE_2_STACK) }}
           ssh-key: ${{ secrets[env.COURSE_2_DEPLOY_KEY_NAME] }}
       - name: Clone the student repo
         uses: actions/checkout@v3
@@ -77,8 +78,8 @@ jobs:
         with:
           script: |
             const result = await github.rest.pulls.create({
+            owner: '${{ github.repository_owner }}',
               title: '${{ env.PR_TITLE }}',
-              owner: '${{ github.repository_owner }}',
               repo: '${{ github.repository }}'.split('/')[1],
               head: '${{ env.GIT_BRANCH }}',
               base: 'main',
