@@ -1,4 +1,2 @@
 .pnpm-debug.log
-course
-!course/.keep
 node_modules
