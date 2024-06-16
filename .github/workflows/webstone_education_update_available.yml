@@ -1,0 +1,69 @@
+on:
+  repository_dispatch:
+    types: [on_webstone_education_update_available]
+
+jobs:
+  open-pr-with-new-update:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    env:
+      COURSES_GITHUB_ORG: ${{ github.event.client_payload.coursesGitHubOrg }}
+      COURSE_ID: ${{ github.event.client_payload.courseId }}
+      COURSE_1_TYPE: ${{ github.event.client_payload.course_1.type }}
+      COURSE_1_STACK: ${{ github.event.client_payload.course_1.stack }}
+      COURSE_1_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course_1.deploykeyname }}
+      # Course 2 is optional. It's used when we deliver a new course that consists of separate frontend and backend lessons
+      COURSE_2_TYPE: ${{ github.event.client_payload.course_2.type }}
+      COURSE_2_STACK: ${{ github.event.client_payload.course_2.stack }}
+      COURSE_2_DEPLOY_KEY_NAME: ${{ github.event.client_payload.course_2.deploykeyname }}
+      GIT_BRANCH: ${{ github.event.client_payload.git.branch }}
+      GIT_COMMIT_MESSAGE: ${{ github.event.client_payload.git.commitmessage }}
+      PR_DESCRIPTION: ${{ github.event.client_payload.pr.description }}
+      PR_TITLE: ${{ github.event.client_payload.pr.title }}
+    steps:
+      - name: Clone the webstone-education template repo
+        uses: actions/checkout@v3
+        with:
+          path: webstone-education-template
+          persist-credentials: false
+          ref: main
+          repository: ${{ env.GITHUB_ORG }}/webstone-education
+          ssh-key: ${{ secrets[env.WEBSTONE_EDUCATION_TEMPLATE_DEPLOY_KEY_NAME] }}
+      - name: Clone the student repo
+        uses: actions/checkout@v3
+        with:
+          path: student-repo
+      - name: Check if branch already exists
+        id: precondition
+        working-directory: student-repo
+        run: git ls-remote --heads --exit-code origin ${{ env.GIT_BRANCH }} && echo "::set-output name=abortWorkflow::true" || echo "::set-output name=abortWorkflow::false"
+      - name: Copy the webstone-education template
+        if: steps.precondition.outputs.abortWorkflow == 'false'
+        working-directory: student-repo
+        run: |
+          cp -r ../webstone-education-template/* .
+      - name: Commit to git & push branch
+        if: steps.precondition.outputs.abortWorkflow == 'false'
+        working-directory: student-repo
+        run: |
+          git switch -c ${{ env.GIT_BRANCH }}
+          git config user.name "Webstone Education Bot"
+          git config user.email github-bot@webstonehq.com
+          git add ./
+          git commit -m "${{ env.GIT_COMMIT_MESSAGE }}"
+          git push --set-upstream origin ${{ env.GIT_BRANCH }}
+      - name: Open a PR in the student repo
+        if: steps.precondition.outputs.abortWorkflow == 'false'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const result = await github.rest.pulls.create({
+            owner: '${{ github.repository_owner }}',
+              title: '${{ env.PR_TITLE }}',
+              repo: '${{ github.repository }}'.split('/')[1],
+              head: '${{ env.GIT_BRANCH }}',
+              base: 'main',
+              body: `${{ env.PR_DESCRIPTION }}`,
+            });

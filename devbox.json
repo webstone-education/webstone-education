@@ -1,19 +1,19 @@
 {
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.11.1/.schema/devbox.schema.json",
   "packages": [
-    "nodejs@18",
-    "nodePackages_latest.pnpm@latest",
-    "tmux@latest",
-    "tmuxp@latest",
-    "gh@latest"
+    "nodejs@18"
   ],
+  "env": {
+    "DEVBOX_COREPACK_ENABLED": "true"
+  },
   "shell": {
     "init_hook": [
-      "gh auth status > /dev/null || gh auth login",
-      "gh extension list | grep -q 'gh dash' || gh extension install dlvhdr/gh-dash"
+      "node ./scripts/symlink-course.js",
+      "pnpm install"
     ],
     "scripts": {
-      "tmux": [
-        "tmuxp load --yes .config/tmux/tmuxp.yaml"
+      "start": [
+        "pnpm start"
       ]
     }
   }
