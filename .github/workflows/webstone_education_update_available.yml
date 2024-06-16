@@ -29,7 +29,7 @@ jobs:
           path: webstone-education-template
           persist-credentials: false
           ref: main
-          repository: ${{ env.GITHUB_ORG }}/webstone-education
+          repository: ${{ env.COURSES_GITHUB_ORG }}/webstone-education
           ssh-key: ${{ secrets[env.WEBSTONE_EDUCATION_TEMPLATE_DEPLOY_KEY_NAME] }}
       - name: Clone the student repo
         uses: actions/checkout@v3
