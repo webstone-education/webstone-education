@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "homepage": "https://webstone.app",
   "license": "ISC",
+  "packageManager": "pnpm@8.15.4",
   "bugs": {
     "url": "https://github.com/WebstoneHQ/webstone-education/issues"
   },
@@ -22,8 +23,8 @@
   "keywords": [
     "webstone, education, full-stack, web, development"
   ],
-	"scripts": {
-		"dev": "echo \"TODO: A CLI to select which lesson to start, solution or student code.\"",
-		"start": "mkdir -p your-project && node ./scripts/symlink-course.js && nc -z localhost 4321 > /dev/null 2>&1 && echo \"\nVisit http://localhost:4321/ to get started.\n\" || pnpm --filter ./app dev"
-	}
+  "scripts": {
+    "dev": "echo \"TODO: A CLI to select which lesson to start, solution or student code.\"",
+    "start": "mkdir -p your-project && node ./scripts/symlink-course.js && nc -z localhost 4321 > /dev/null 2>&1 && echo \"\nVisit http://localhost:4321/ to get started.\n\" || pnpm --filter ./app dev"
+  }
 }

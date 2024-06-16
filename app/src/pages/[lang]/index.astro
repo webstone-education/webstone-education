@@ -7,7 +7,7 @@ const { lang } = Astro.params;
 
 const fsCourseLandingPageResponse = await fetch(Astro.url.href + "/fs");
 if (fsCourseLandingPageResponse.status === 200) {
-	return Astro.redirect("/fs");
+	return Astro.redirect(lang + "/fs");
 } else {
 	const feCourseLandingPageResponse = await fetch(Astro.url.href + "/fe");
 	if (feCourseLandingPageResponse.status === 200) {
