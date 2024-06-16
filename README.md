@@ -10,7 +10,6 @@ To get started, please [check your pull requests](./pulls). You very likely have
 >
 > If you don't see a pull request, but obtained a course, please contact us and we will help you get started. You will be up and running in no time.
 
-
 Go ahead and merge that pull request – LGTM, no need to do a code review 😎.
 
 Once you merged the pull request, clone the repository and get started with the following two steps:
